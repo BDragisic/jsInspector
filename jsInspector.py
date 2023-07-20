@@ -88,6 +88,12 @@ def get_version(url, query):
 
 if __name__ == '__main__':
 
+    ''' DISCLAIMER
+    Using the output from this tool to launch any unauthorised cyber 
+    attack is the sole responsiblity of the user. This tool is intended
+    for ethical hackers and pentesters who have gained explicit permision.
+    '''
+
     args = parse_args()
     print(f'''
     _     _____                           _             
