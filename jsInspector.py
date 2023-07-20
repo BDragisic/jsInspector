@@ -10,14 +10,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 # 2D array of common JS packages and the console commands to reveal their version
 libraries = [
-    # ["Adobe Target", "adobe.target.VERSION", ''],
-    # ["Angular", "getAllAngularRootElements()[0].attributes['ng-version']",
-    #  'https://code.angularjs.org/'],
-    # ["AngularJS", "angular.version.full", 'https://code.angularjs.org/'],
-    # ["Bootstrap", "bootstrap.Alert.VERSION ",
-    #     'https://getbootstrap.com/docs/versions/'],
-    # ["Bootstrap", "$.fn.tooltip.Constructor.VERSION",
-    #     'https://getbootstrap.com/docs/versions/'],
+    ["Adobe Target", "adobe.target.VERSION", ''],
+    ["Angular", "getAllAngularRootElements()[0].attributes['ng-version']",
+     'https://code.angularjs.org/'],
+    ["AngularJS", "angular.version.full", 'https://code.angularjs.org/'],
+    ["Bootstrap", "bootstrap.Alert.VERSION ",
+        'https://getbootstrap.com/docs/versions/'],
+    ["Bootstrap", "$.fn.tooltip.Constructor.VERSION",
+        'https://getbootstrap.com/docs/versions/'],
     ["Core", "core.version", 'https://www.npmjs.com/package/core-js'],
     ["Core", "window['__core-js_shared__'].versions[0].version",
         'https://www.npmjs.com/package/core-js'],
