@@ -7,3 +7,6 @@ Ensure that the Chromedriver version is compatible with your Chrome Browser whic
 
 ## Usage
 `python3 jsInspector.py -t domain.com`
+
+## Contributions
+This script is released under the MIT license, and if you would like contribute, namely adding more commands to find JavaScript versions, please submit a pull request.
