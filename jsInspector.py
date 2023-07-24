@@ -46,6 +46,10 @@ def parse_args():
         '-t', '--target', help='Specify a single webpage to scan'
     )
 
+    parser.add_argument(
+        '-f', '--file', help='Specify path to file with a list of newline separated domains'
+    )
+
     return parser.parse_args()
 
 
@@ -83,15 +87,23 @@ if __name__ == '__main__':
 Developed by github.com/BDragisic and github.com/Gr4y-r0se
           ''')
 
-    target = args.target if 'https' in args.target else 'https://'+args.target
-    print('\nTarget:', colored(f'{target}\n', 'blue'))
+    if args.target != None:
+        targets = [
+            args.target if 'https' in args.target else 'https://'+args.target]
+    elif args.file != None:
+        with open(args.file, 'r') as domainsFile:
+            targets = [i.strip() for i in domainsFile.readlines()]
 
-    output = get_version('https://'+args.target)
+    for target in targets:
+        print('\nTarget:', colored(f'{target}\n', 'blue'))
 
-    for library in output:
+        output = get_version('https://'+target)
 
-        name = library.split(':')[0]
-        version = library.split(':')[1]
+        for library in output:
 
-        if version != ' Not Present' and version != ' undefined':
-            print(f'    [*] {name}:', colored(version, 'green'))
+            name = library.split(':')[0]
+            version = library.split(':')[1]
+
+            if version != ' Not Present' and version != ' undefined':
+                print(f'    [*] {name}:', colored(version, 'green'))
+        print('\n')
