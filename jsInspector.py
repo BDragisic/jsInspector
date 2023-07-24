@@ -1,3 +1,5 @@
+import json
+import csv
 import argparse
 import time
 
@@ -8,59 +10,37 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-# 2D array of common JS packages and the console commands to reveal their version
-libraries = [
-    ["Adobe Target", "adobe.target.VERSION", ''],
-    ["Angular", "getAllAngularRootElements()[0].attributes['ng-version']",
-     'https://code.angularjs.org/'],
-    ["AngularJS", "angular.version.full", 'https://code.angularjs.org/'],
-    ["Bootstrap", "bootstrap.Alert.VERSION ",
-        'https://getbootstrap.com/docs/versions/'],
-    ["Bootstrap", "$.fn.tooltip.Constructor.VERSION",
-        'https://getbootstrap.com/docs/versions/'],
-    ["Core", "core.version", 'https://www.npmjs.com/package/core-js'],
-    ["Core", "window['__core-js_shared__'].versions[0].version",
-        'https://www.npmjs.com/package/core-js'],
-    ["D3", "d3.version", 'https://github.com/d3/d3/releases'],
-    ["Data Tables", "$.fn.dataTable.version",
-        'https://cdn.datatables.net/releases.html'],
-    ["Data Tables", "$().dataTable.version",
-     'https://cdn.datatables.net/releases.html'],
-    ["Dojo", "dojo.version", 'https://github.com/dojo/dojo'],
-    ["Dropzone", "Dropzone.version", 'https://www.npmjs.com/package/dropzone'],
-    ["Ember.js", "Ember.VERSION", 'https://emberjs.com/releases/'],
-    ["ExtJS 3.x", "Ext.version", 'https://www.sencha.com/products/extjs/'],
-    ["ExtJS 4.0", "Ext.getVersion('extjs')",
-     'https://www.sencha.com/products/extjs/'],
-    ["ExtJS >= 4.1", "Ext.getVersion().version",
-     'https://www.sencha.com/products/extjs/'],
-    ["FancyBox", "jQuery.fancybox.version", 'http://fancybox.net/'],
-    ["Highcharts", "Highcharts.version",
-        'https://www.npmjs.com/package/highcharts?activeTab=versions'],
-    ["jQuery", "jQuery().jquery", 'https://releases.jquery.com/jquery/'],
-    ["jQueryUI", "jQuery.ui.version", 'https://releases.jquery.com/ui/'],
-    ['jQueryUI', "$.ui.version", 'https://releases.jquery.com/ui/'],
-    ["Knockout.js", "ko.version", 'https://knockoutjs.com/downloads/'],
-    ["Lodash", "_.VERSION", 'https://www.npmjs.com/package/lodash?activeTab=versions'],
-    ["Microsoft Clarity", "clarity.v", 'https://www.npmjs.com/package/clarity-js'],
-    ["Migrate", "jQuery.migrateVersion", 'https://releases.jquery.com/jquery/'],
-    ["Modernizr", "Modernizr._version", 'https://www.npmjs.com/package/modernizr'],
-    ["Moment", "moment.version", 'https://www.npmjs.com/package/moment'],
-    ["Prototype", "prototype.version", 'http://prototypejs.org/download/'],
-    ["React", "React.version", 'https://github.com/facebook/react/releases'],
-    ["RequireJS", "require.version", 'https://requirejs.org/docs/download.html'],
-    ["Toastr", "toastr.version", 'https://www.npmjs.com/package/toastr'],
-    ["Wordpress Emoji", "window._wpemojiSettings.source.concatemoji",
-        'https://wordpress.org/support/topic/wp-emoji-release-min-js/'],
-    ["YUI", "Y.VERSION", 'https://clarle.github.io/yui3/']
-]
+
+def get_libs():
+    '''
+    Read the version commands from CSV file and add them to array which is interpolated into 
+    a Javascript function which executes them and returns an array in the console
+    '''
+    array = []
+    with open('./libraries.csv', 'r') as infile:
+        reader = infile.readlines()
+
+    for row in reader:
+        name, command = row.split(',', maxsplit=1)
+
+        parsedCommand = '''"%s: ".concat(eval('try { %s } catch { "Not Present" }'))''' % (
+            name, command.strip())
+        array.append(parsedCommand)
+
+    command = '''function results() {var results = [];
+            var arr = %s;
+            for (var lib in arr) {
+            results.push(eval(arr[lib]));
+            }
+            return results;}; return results()''' % array
+    return command
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         prog='jsInpector',
         description='A script to detect the versions of common JS libraries present on a webpage.',
-        epilog='Developed by github.com/BDragisic')
+        epilog='Developed by github.com/BDragisic and github.com/Gr4y-r0se')
 
     parser.add_argument(
         '-t', '--target', help='Specify a single webpage to scan'
@@ -69,7 +49,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def get_version(url, query):
+def get_version(url):
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")
     chrome_path = ChromeDriverManager().install()
@@ -80,19 +60,14 @@ def get_version(url, query):
 
     # Use built in Selenium method to execute the console commands.
     driver.get(url)
-    version = driver.execute_script(f'return {query}')
+    script = get_libs()
+    versions = driver.execute_script(script)
     time.sleep(0.1)
     driver.quit()
-    return version
+    return versions
 
 
 if __name__ == '__main__':
-
-    ''' DISCLAIMER
-    Using the output from this tool to launch any unauthorised cyber 
-    attack is the sole responsiblity of the user. This tool is intended
-    for ethical hackers and pentesters who have gained explicit permision.
-    '''
 
     args = parse_args()
     print(f'''
@@ -105,27 +80,18 @@ if __name__ == '__main__':
   _/ |                   | |                            
  |__/                    |_|                            
  
-Developed by github.com/BDragisic
+Developed by github.com/BDragisic and github.com/Gr4y-r0se
           ''')
 
     target = args.target if 'https' in args.target else 'https://'+args.target
     print('\nTarget:', colored(f'{target}\n', 'blue'))
-    for package in libraries:
-        print(
-            f'    [*] Checking {package[0]}                                       ', end='\r')
-        command = package[1]
-        try:
-            versionDetected = get_version(target, command)
-        except KeyboardInterrupt:
-            break
-        except:
-            # If console commands returns error, presumably the JS package doesn't exist
-            continue
 
-        if versionDetected:
-            # driver.execute_script() returns None if the commands returned nothing
-            print(f'\n    [*] {package[0]}:')
-            print('        [*] Version detected:',
-                  colored(versionDetected, 'green'))
-            print('        [*] Latest release:',
-                  colored(package[2], 'green'))
+    output = get_version('https://'+args.target)
+
+    for library in output:
+
+        name = library.split(':')[0]
+        version = library.split(':')[1]
+
+        if version != ' Not Present' and version != ' undefined':
+            print(f'    [*] {name}:', colored(version, 'green'))

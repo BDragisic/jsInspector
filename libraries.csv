@@ -1,0 +1,33 @@
+Adobe Target, adobe.target.VERSION
+Angular, getAllAngularRootElements()[0].attributes.ng-version
+AngularJS, angular.version.full
+Bootstrap, bootstrap.Alert.VERSION 
+Bootstrap, $.fn.tooltip.Constructor.VERSION
+Core, core.version
+Core, window[String.fromCharCode(95,95,99,111,114,101,45,106,115,95,115,104,97,114,101,100,95,95)].versions[0].version
+D3, d3.version
+Data Tables, $.fn.dataTable.version
+Data Tables, $().dataTable.version
+Dojo, dojo.version
+Dropzone, Dropzone.version
+Ember.js, Ember.VERSION
+ExtJS 3.x, Ext.version
+ExtJS 4.0, Ext.getVersion(String.fromCharCode(101,120,116,106,115))
+ExtJS >= 4.1, Ext.getVersion().version
+FancyBox, jQuery.fancybox.version
+Highcharts, Highcharts.version
+jQuery, jQuery().jquery
+jQueryUI, jQuery.ui.version
+jQueryUI, $.ui.version
+Knockout.js, ko.version
+Lodash, _.VERSION
+Microsoft Clarity, clarity.v
+Migrate, jQuery.migrateVersion
+Modernizr, Modernizr._version
+Moment, moment.version
+Prototype, prototype.version
+React, React.version
+RequireJS, require.version
+Toastr, toastr.version
+Wordpress Emoji, window._wpemojiSettings.source.concatemoji
+YUI, Y.VERSION
