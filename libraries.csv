@@ -1,33 +1,33 @@
-Adobe Target, adobe.target.VERSION
-Angular, getAllAngularRootElements()[0].attributes.ng-version
-AngularJS, angular.version.full
-Bootstrap, bootstrap.Alert.VERSION 
-Bootstrap, $.fn.tooltip.Constructor.VERSION
-Core, core.version
-Core, window[String.fromCharCode(95,95,99,111,114,101,45,106,115,95,115,104,97,114,101,100,95,95)].versions[0].version
-D3, d3.version
-Data Tables, $.fn.dataTable.version
-Data Tables, $().dataTable.version
-Dojo, dojo.version
-Dropzone, Dropzone.version
-Ember.js, Ember.VERSION
-ExtJS 3.x, Ext.version
-ExtJS 4.0, Ext.getVersion(String.fromCharCode(101,120,116,106,115))
-ExtJS >= 4.1, Ext.getVersion().version
-FancyBox, jQuery.fancybox.version
-Highcharts, Highcharts.version
-jQuery, jQuery().jquery
-jQueryUI, jQuery.ui.version
-jQueryUI, $.ui.version
-Knockout.js, ko.version
-Lodash, _.VERSION
-Microsoft Clarity, clarity.v
-Migrate, jQuery.migrateVersion
-Modernizr, Modernizr._version
-Moment, moment.version
-Prototype, prototype.version
-React, React.version
-RequireJS, require.version
-Toastr, toastr.version
-Wordpress Emoji, window._wpemojiSettings.source.concatemoji
-YUI, Y.VERSION
+Adobe Target| adobe.target.VERSION |
+Angular| getAllAngularRootElements()[0].attributes.ng-version|
+AngularJS| angular.version.full|
+Bootstrap| bootstrap.Alert.VERSION | registry.npmjs.org/bootstrap/latest
+Bootstrap| $.fn.tooltip.Constructor.VERSION| registry.npmjs.org/bootstrap/latest
+Core| core.version| registry.npmjs.org/core-js/latest
+Core| window[String.fromCharCode(95,95,99,111,114,101,45,106,115,95,115,104,97,114,101,100,95,95)].versions[0].version| registry.npmjs.org/core-js/latest
+D3| d3.version| registry.npmjs.org/d3/latest
+Data Tables| $.fn.dataTable.version|
+Data Tables| $().dataTable.version|
+Dojo| dojo.version| registry.npmjs.org/dojo/latest
+Dropzone| Dropzone.version| registry.npmjs.org/dropzone/latest
+Ember.js| Ember.VERSION| registry.npmjs.org/ember/latest
+ExtJS 3.x| Ext.version| registry.npmjs.org/ext/latest
+ExtJS 4.0| Ext.getVersion(String.fromCharCode(101,120,116,106,115))| registry.npmjs.org/ext/latest
+ExtJS >= 4.1| Ext.getVersion().version| registry.npmjs.org/ext/latest
+FancyBox| jQuery.fancybox.version| registry.npmjs.org/@fancyapps/fancybox/latest
+Highcharts| Highcharts.version| registry.npmjs.org/highcharts/latest
+jQuery| jQuery().jquery| registry.npmjs.org/jquery/latest 
+jQueryUI| jQuery.ui.version| registry.npmjs.org/jquery-ui/latest
+jQueryUI| $.ui.version| registry.npmjs.org/jquery-ui/latest
+Knockout.js| ko.version| registry.npmjs.org/knockout/latest
+Lodash| _.VERSION| registry.npmjs.org/lodash/latest
+Microsoft Clarity| clarity.v| registry.npmjs.org/clarity-js/latest
+Migrate| jQuery.migrateVersion| registry.npmjs.org/jquery-migrate/latest
+Modernizr| Modernizr._version| registry.npmjs.org/modernizr/latest
+Moment| moment.version| registry.npmjs.org/moment/latest
+Prototype| prototype.version| registry.npmjs.org/prototype/latest
+React| React.version| registry.npmjs.org/react/latest
+RequireJS| require.version| registry.npmjs.org/requirejs/latest
+Toastr| toastr.version| registry.npmjs.org/toastr/latest
+Wordpress Emoji| window._wpemojiSettings.source.concatemoji|
+YUI| Y.VERSION| registry.npmjs.org/yui/latest

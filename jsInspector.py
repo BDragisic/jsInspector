@@ -1,9 +1,12 @@
+import requests
 import json
 import csv
 import argparse
 import time
 
+from packaging import version
 from termcolor import colored
+
 from selenium import webdriver
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.service import Service
@@ -18,13 +21,16 @@ def get_libs():
     '''
     array = []
     with open('./libraries.csv', 'r') as infile:
-        reader = infile.readlines()
+        reader = [i.strip() for i in infile.readlines()]
 
     for row in reader:
-        name, command = row.split(',', maxsplit=1)
+        splitRow = row.split('|')
+        name, command, npmLink = splitRow[0], splitRow[1], splitRow[2]
 
+        nameLink = name+'|'+npmLink
         parsedCommand = '''"%s: ".concat(eval('try { %s } catch { "Not Present" }'))''' % (
-            name, command.strip())
+            nameLink, command.strip())
+
         array.append(parsedCommand)
 
     command = '''function results() {var results = [];
@@ -34,6 +40,7 @@ def get_libs():
             }
             return results;}; return results()''' % array
     return command
+    exit()
 
 
 def parse_args():
@@ -64,6 +71,7 @@ def get_version(url):
 
     # Use built in Selenium method to execute the console commands.
     driver.get(url)
+
     script = get_libs()
     versions = driver.execute_script(script)
     time.sleep(0.1)
@@ -88,22 +96,45 @@ Developed by github.com/BDragisic and github.com/Gr4y-r0se
           ''')
 
     if args.target != None:
-        targets = [
-            args.target if 'https' in args.target else 'https://'+args.target]
+        targets = [args.target]
     elif args.file != None:
         with open(args.file, 'r') as domainsFile:
             targets = [i.strip() for i in domainsFile.readlines()]
 
     for target in targets:
+        target = target if 'https' in target else 'https://'+target
+
         print('\nTarget:', colored(f'{target}\n', 'blue'))
 
-        output = get_version('https://'+target)
+        output = get_version(target)
 
         for library in output:
 
-            name = library.split(':')[0]
-            version = library.split(':')[1]
+            # Janky splits but works for now
+            nameAndLink = library.split(':')[0]
+            name = nameAndLink.split('|')[0]
+            npm = nameAndLink.split('|')[1]
 
-            if version != ' Not Present' and version != ' undefined':
-                print(f'    [*] {name}:', colored(version, 'green'))
-        print('\n')
+            _version = library.split(':')[1]
+            # If the package is avaiable on the NPM registry we can extract the latest version and compare
+            if npm and _version != ' Not Present' and _version != ' undefined':
+                latestVersion = json.loads(
+                    requests.get('https://'+npm.strip()).text)['version']
+
+                if version.parse(_version) < version.parse(latestVersion):
+                    colour = 'red'
+                    name = name + " OUTDATED"
+                else:
+                    colour = 'green'
+
+            else:
+                latestVersion = None
+                colour = 'green'
+
+            if _version != ' Not Present' and _version != ' undefined':
+                print(f'    [*] {name}:')
+                print(f'        [*] Version detected: ' +
+                      colored(_version, colour))
+                if latestVersion:
+                    print(f'        [*] Latest version: ' +
+                          colored(latestVersion, colour))
