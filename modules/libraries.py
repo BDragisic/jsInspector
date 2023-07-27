@@ -1,5 +1,6 @@
 import argparse
 
+
 def parse_args():
     parser = argparse.ArgumentParser(
         prog="jsInpector",
@@ -16,6 +17,7 @@ def parse_args():
     )
 
     return parser.parse_args()
+
 
 def get_libs():
     """

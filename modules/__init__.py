@@ -1,5 +1,5 @@
-#__init__.py
+# __init__.py
 
 
-from .banner import banner 
+from .banner import banner
 from .libraries import get_libs

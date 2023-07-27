@@ -1,7 +1,7 @@
 import requests
 import json
 
-from modules import banner,parse_args
+from modules import banner, parse_args
 
 from packaging import version
 from termcolor import colored
@@ -9,9 +9,7 @@ from termcolor import colored
 
 if __name__ == "__main__":
     args = parse_args()
-    print(
-        banner
-    )
+    print(banner)
 
     if args.target != None:
         targets = [args.target]
