@@ -15,46 +15,52 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def get_libs():
-    '''
-    Read the version commands from CSV file and add them to array which is interpolated into 
+    """
+    Read the version commands from CSV file and add them to array which is interpolated into
     a Javascript function which executes them and returns an array in the console
-    '''
+    """
     array = []
-    with open('./libraries.csv', 'r') as infile:
+    with open("./libraries.csv", "r") as infile:
         reader = [i.strip() for i in infile.readlines()]
 
     for row in reader:
-        splitRow = row.split('|')
+        splitRow = row.split("|")
         name, command, npmLink = splitRow[0], splitRow[1], splitRow[2]
 
-        nameLink = name+'|'+npmLink
-        parsedCommand = '''"%s: ".concat(eval('try { %s } catch { "Not Present" }'))''' % (
-            nameLink, command.strip())
+        nameLink = name + "|" + npmLink
+        parsedCommand = (
+            """"%s: ".concat(eval('try { %s } catch { "Not Present" }'))"""
+            % (nameLink, command.strip())
+        )
 
         array.append(parsedCommand)
 
-    command = '''function results() {var results = [];
+    command = (
+        """function results() {var results = [];
             var arr = %s;
             for (var lib in arr) {
             results.push(eval(arr[lib]));
             }
-            return results;}; return results()''' % array
+            return results;}; return results()"""
+        % array
+    )
     return command
     exit()
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        prog='jsInpector',
-        description='A script to detect the versions of common JS libraries present on a webpage.',
-        epilog='Developed by github.com/BDragisic and github.com/Gr4y-r0se')
-
-    parser.add_argument(
-        '-t', '--target', help='Specify a single webpage to scan'
+        prog="jsInpector",
+        description="A script to detect the versions of common JS libraries present on a webpage.",
+        epilog="Developed by github.com/BDragisic and github.com/Gr4y-r0se",
     )
 
+    parser.add_argument("-t", "--target", help="Specify a single webpage to scan")
+
     parser.add_argument(
-        '-f', '--file', help='Specify path to file with a list of newline separated domains'
+        "-f",
+        "--file",
+        help="Specify path to file with a list of newline separated domains",
     )
 
     return parser.parse_args()
@@ -79,10 +85,10 @@ def get_version(url):
     return versions
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     args = parse_args()
-    print(f'''
+    print(
+        f"""
     _     _____                           _             
    (_)   |_   _|                         | |            
     _ ___  | |  _ __  ___ _ __   ___  ___| |_ ___  _ __ 
@@ -93,48 +99,50 @@ if __name__ == '__main__':
  |__/                    |_|                            
  
 Developed by github.com/BDragisic and github.com/Gr4y-r0se
-          ''')
+          """
+    )
 
     if args.target != None:
         targets = [args.target]
     elif args.file != None:
-        with open(args.file, 'r') as domainsFile:
+        with open(args.file, "r") as domainsFile:
             targets = [i.strip() for i in domainsFile.readlines()]
 
     for target in targets:
-        target = target if 'https' in target else 'https://'+target
+        target = target if "https" in target else "https://" + target
 
-        print('\nTarget:', colored(f'{target}\n', 'blue'))
+        print("\nTarget:", colored(f"{target}\n", "blue"))
 
         output = get_version(target)
 
         for library in output:
-
             # Janky splits but works for now
-            nameAndLink = library.split(':')[0]
-            name = nameAndLink.split('|')[0]
-            npm = nameAndLink.split('|')[1]
+            nameAndLink = library.split(":")[0]
+            name = nameAndLink.split("|")[0]
+            npm = nameAndLink.split("|")[1]
 
-            _version = library.split(':')[1]
+            _version = library.split(":")[1]
             # If the package is avaiable on the NPM registry we can extract the latest version and compare
-            if npm and _version != ' Not Present' and _version != ' undefined':
-                latestVersion = json.loads(
-                    requests.get('https://'+npm.strip()).text)['version']
+            if npm and _version != " Not Present" and _version != " undefined":
+                latestVersion = json.loads(requests.get("https://" + npm.strip()).text)[
+                    "version"
+                ]
 
                 if version.parse(_version) < version.parse(latestVersion):
-                    colour = 'red'
+                    colour = "red"
                     name = name + " OUTDATED"
                 else:
-                    colour = 'green'
+                    colour = "green"
 
             else:
                 latestVersion = None
-                colour = 'green'
+                colour = "green"
 
-            if _version != ' Not Present' and _version != ' undefined':
-                print(f'    [*] {name}:')
-                print(f'        [*] Version detected: ' +
-                      colored(_version, colour))
+            if _version != " Not Present" and _version != " undefined":
+                print(f"    [*] {name}:")
+                print(f"        [*] Version detected: " + colored(_version, colour))
                 if latestVersion:
-                    print(f'        [*] Latest version: ' +
-                          colored(latestVersion, 'green'))
+                    print(
+                        f"        [*] Latest version: "
+                        + colored(latestVersion, "green")
+                    )
