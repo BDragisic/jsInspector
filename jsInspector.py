@@ -137,4 +137,4 @@ Developed by github.com/BDragisic and github.com/Gr4y-r0se
                       colored(_version, colour))
                 if latestVersion:
                     print(f'        [*] Latest version: ' +
-                          colored(latestVersion, colour))
+                          colored(latestVersion, 'green'))
