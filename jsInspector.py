@@ -1,7 +1,7 @@
 import requests
 import json
 
-from modules import banner, parse_args
+from modules import banner, parse_args, locate
 
 from packaging import version
 from termcolor import colored
@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
         print("\nTarget:", colored(f"{target}\n", "blue"))
 
-        output = get_version(target)
+        output = locate.get_version(target)
 
         for library in output:
             # Janky splits but works for now
@@ -49,7 +49,8 @@ if __name__ == "__main__":
 
             if _version != " Not Present" and _version != " undefined":
                 print(f"    [*] {name}:")
-                print(f"        [*] Version detected: " + colored(_version, colour))
+                print(f"        [*] Version detected: " +
+                      colored(_version, colour))
                 if latestVersion:
                     print(
                         f"        [*] Latest version: "

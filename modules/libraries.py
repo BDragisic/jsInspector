@@ -8,7 +8,8 @@ def parse_args():
         epilog="Developed by github.com/BDragisic and github.com/Gr4y-r0se",
     )
 
-    parser.add_argument("-t", "--target", help="Specify a single webpage to scan")
+    parser.add_argument(
+        "-t", "--target", help="Specify a single webpage to scan")
 
     parser.add_argument(
         "-f",
@@ -50,4 +51,3 @@ def get_libs():
         % array
     )
     return command
-    exit()
