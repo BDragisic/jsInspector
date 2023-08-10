@@ -12,7 +12,7 @@ from .libraries import get_libs
 def get_version(url):
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")
-    chrome_path = ChromeDriverManager().install()
+    chrome_path = ChromeDriverManager(version='114.0.5735.90').install()
     chrome_service = Service(chrome_path)
     driver = webdriver.Chrome(options=options, service=chrome_service)
     driver.set_page_load_timeout(10)
